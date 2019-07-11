@@ -3,3 +3,12 @@ div #form{
 	margin-left: 20%;
 	margin-right: 20%;
 }
+canvas{
+	width: 80%;
+	height: 10%;
+	margin-right: 10%;
+	margin-left: 10%;
+}
+.title{
+	text-align: center;
+}

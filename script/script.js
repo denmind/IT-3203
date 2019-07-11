@@ -1,5 +1,5 @@
 var names = ["age",
-			 "device",
+			 "devices",
 			 "public_wifi",
 			 "vpn",
 			 "smartphone",
@@ -13,10 +13,10 @@ var names = ["age",
 			 "device_sharing"]
 
 var questions = ["1. What is your age?",
-				 "2. Which of these devices do you have? [Check all that apply. Leave unchecked if none]",
+				 "2. Which of these devices do you have?",
 				 "3. Do you use public Wi-Fi?",
-				 "3-1.If you answered 'Yes' to Question 3, do you use a VPN?",
-				 "4. Which kind of smartphone do you have? [Check all that apply. Leave unchecked if none]",
+				 "3-1. If you answered 'Yes' to Question 3, do you use a VPN?",
+				 "4. Which kind of smartphone do you have?",
 				 "5. Do you use voice assistants when using your devices?",
 				 "6. Do you use an alias when personal information is required?",
 				 "6-1. If you answered 'Yes' to Question 6, which information do you alter?",
@@ -54,15 +54,19 @@ var labels = ["Age group",
 			  "Third party verification",
 			  "Device sharing"]
 
+var helpers = "Check all that apply. Leave unchecked if none"
+
 var schema = {
         "type": "object",
         "properties": {
             "age": {
                 "type": "string",
-                "required": true
+                "required": true,
+				"minimum" : 1,
+				"maximum" : 100
             },
 			"devices": {
-				"type": "string"
+				"type": "array"
 			},
 			"public_wifi": {
 				"type": "string"
@@ -71,7 +75,7 @@ var schema = {
                 "type": "string"
             },
 			 "smartphone": {
-                "type": "string"
+                "type": "array"
             },
 			 "voice_assist": {
                 "type": "string"
@@ -112,14 +116,15 @@ var options = {
 				"type": "checkbox",
 				"label": questions[1],
 				"multiple": "true",
-                "dataSource": choices[1]
+                "dataSource": choices[1],
+				"helper" : helpers
 			},
 			"public_wifi": {
 				"name": names[2],
 				"type": "radio",
 				"hideNone": "true",
 				"label": questions[2],
-				"dataSource": choices[2]
+				"dataSource": choices[2]
 			},
 			"vpn": {
 				"name": names[3],
@@ -133,7 +138,8 @@ var options = {
                 "type": "checkbox",
                 "label": questions[4],
 				"multiple": "true",
-				"dataSource": choices[4]
+				"dataSource": choices[4],
+				"helper" : helpers
 			},
 			"voice_assist": {
 				"name": names[5],
@@ -197,13 +203,138 @@ var options = {
                 "submit": {
                     "value": "Submit the Form",
 					"click": function() {
-                        alert(JSON.stringify(this.getValue(), null, "  "));
+						var data = JSON.parse(JSON.stringify(this.getValue()));
+						
+						console.log(data);
+						showModal(data);
                     }
                 }
             }
         }
     };
+
+var data = [[64,95,23,8,5]]
+var legends = [["Below 18","18 to 24","25 to 34","35 to 44","45 to 54"]]
+var colors = ["#6699cc", "#fff275", "#ff8c42", "#ff3c38", "#a23e48", "#bfe020", "#bfff20", 
+			  "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", 
+			  "#AAAAAA"]
+
+var chart_data = [{
+		datasets: [{
+			label: labels[0],
+			data: data[0],
+			backgroundColor: colors,
+			borderColor : "#000000",
+			borderWidth : 2
+		}],
+		labels: legends[0]
+	}];
+
+
 $("#form").alpaca({
     "schema": schema,
 	"options": options
 });
+function showModal(input){
+	var modal_messages = [define_age(input["age"])];
+	
+	var modal_content = "<div class='title'>Age Group"+
+							"<canvas  id='chart_age'></canvas>"+ //Age
+						"</div>"; 
+	console.log(define_device(input.devices));
+	var modal = new tingle.modal({
+		footer: true,
+		stickyFooter: false,
+		closeMethods: ['overlay', 'button', 'escape'],
+		closeLabel: "Close",
+	});
+	
+	modal.setContent(modal_content);
+
+	modal.addFooterBtn('Close', 'tingle-btn tingle-btn--primary', function() {
+		modal.close();
+	});
+
+	modal.open();
+	
+	//Age
+	var canvas_age = document.getElementById('chart_age').getContext('2d');
+	
+	var myChart = new Chart(canvas_age, {
+		type: 'doughnut',
+		data: chart_data[0],
+		options: {
+			responsive: false,
+			cutoutPercentage: 40
+		}
+	});
+}
+
+function define_age(age){
+	var message;
+	
+	message = "You belong to the "+ define_age_helper(age) +" percent of the correspondents that has taken the survey";
+	
+	return message;	
+}
+function define_age_helper(age){
+	
+	var value = 1;
+	
+	if(age < 18)
+		value = 33;
+	else if(age >= 18 && age <= 24)
+		value = 49;
+	else if(age >= 25 && age <= 34)
+		value = 12;
+	else if(age >= 35 && age <= 44)
+		value = 4;
+	else if(age >= 45)
+		value = 2;
+	
+	return value;
+}
+
+function define_device(devices){
+	
+	var message = "";
+	
+	if(devices != undefined){
+		
+		for(let i = 0 ; i < devices.length; i++)
+			message += define_device_helper(devices[i].value) + "\n\n";
+	}else
+		message = "You selected no device. That's okay!";
+	return message;
+}
+function define_device_helper(device){
+	var message = "";
+	
+	switch(device){
+		case "Amazon Alexa": message = 
+		"Amazon employs thousands of people around the world to listen to voice recordings captured in Echo users’ homes and offices" ; break; 
+		
+		case "CCTV": message = 
+		"The advantage of CCTV systems is that a company’s property can be watched over constantly. But it becomes a more complex issue when installed cameras watch employees, students, or customers. And as ‘personal data’, the responsibilities of data controllers in managing it are made a little more intricate." ; 
+		break; 
+		
+		case "Game Consoles": message = "Take the Xbox One Kinect 2.0 feature. It records your voice and takes note of your face and body details. And since it’s “always on,” you know that your information is already saved and stored. Pair that with the PlayStation 4 scanning your living room for gameplay—data of you and your living room are fed into the virtual realm." ; 
+		break; 
+		
+		case "Google Home": message = "Google Home can be unintentionally triggered and record conversations. Many people leave Google Home unmuted whilst it is not being used, however, they shouldn’t." ; 
+		break; 
+		
+		case "Laptop": message = "Laptops offer a great convenience due to their portability. This portability, however, makes them a prime target for thieves. These thieves not only target portable computers for the value of the device itself, but also for the restricted data they might contain." ; 
+		break; 
+		
+		case "Personal Computer": message = "There are new viruses and security threats that emerge every day!  Hackers and scammers are becoming more sophisticated than ever in masking their threats so that people will unknowingly click them and become a victim." ; 
+		break; 
+		
+		case "Smartphone": message = "Unlike many of our computers, our smartphones are ALWAYS with us and many of us rarely turn them off. However, consumers need to be aware of the kind of information that can be collected by various entities from your smartphone." ; 
+		break; 
+		
+		case "Tablet": message = "If you want to bring your own Android or iOS tablet to work, you should consider a couple of factors before taking the plunge. First, in some respects you lose ownership of your device once you commit to using it at work and keeping potentially sensitive data on it. Corporate intellectual property or client data is extremely valuable to your employer, and as such you lose certain freedoms regarding any device that contains that information. Mishandle that information, and you might lose your job" ; break;
+	}
+	
+	return message;
+}
