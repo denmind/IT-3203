@@ -13,3 +13,28 @@ Laptop Security and Data Protection. (n.d.). Retrieved July 11, 2019, from https
 O'Flaherty, K. (2019, April 13). Amazon Staff Are Listening To Alexa Conversations -- Here's What To Do. Retrieved from https://www.forbes.com/sites/kateoflahertyuk/2019/04/12/amazon-staff-are-listening-to-alexa-conversations-heres-what-to-do/#8256f9f71a22
 
 Real Threats Found in Virtual Gaming Consoles. (n.d.). Retrieved July 11, 2019, from https://www.trendmicro.com/vinfo/us/security/news/internet-of-things/real-threats-found-in-virtual-gaming-consoles
+
+The benefits of public Wi-Fi access on our society. (2018, November 26). Retrieved July 12, 2019, from https://www.tanaza.com/blog/the-benefits-of-public-wi-fi-access-on-our-society/
+
+Quora. (2015, May 06). What Are The Risks When Using Public Wi-Fi? Retrieved July 12, 2019, from https://www.forbes.com/sites/quora/2015/05/06/what-are-the-risks-when-using-public-wi-fi/#2324cf6f2681
+
+Mocan, T. (2019, March 14). What Are the Benefits and Disadvantages of VPN Services? Retrieved July 12, 2019, from https://www.cactusvpn.com/vpn/vpn-advantages-disadvantages/
+
+Beal, V. (n.d.). VPN – virtual private network. Retrieved July 12, 2019, from https://www.webopedia.com/TERM/V/VPN.html
+
+This is the most important setting you can enable on your iPhone. (2018, June 08). Retrieved July 12, 2019, from https://www.cultofmac.com/551687/data-protection-most-important-setting-on-your-iphone/
+
+Knox Deep Dive: Sensitive Data Protection. (n.d.). Retrieved July 12, 2019, from https://www.samsungknox.com/en/blog/knox-deep-dive-sensitive-data-protection
+
+Aulakh, G. (2017, August 22). Not violating India's privacy laws, user data fully safe: Oppo. Retrieved July 12, 2019, from https://economictimes.indiatimes.com/tech/hardware/not-violating-indias-privacy-laws-user-data-fully-safe-oppo/articleshow/60162613.cms
+
+The Huawei security risk: Factors to consider before buying Chinese IT. (n.d.). Retrieved July 12, 2019, from https://searchsecurity.techtarget.com/feature/The-Huawei-security-risk-Factors-to-consider-before-buying-Chinese-IT
+
+Privacy Policy. (n.d.). Retrieved July 12, 2019, from https://www.cherrymobile.com/privacy-policy/
+
+Home2017. (n.d.). Retrieved July 12, 2019, from http://vivosecurity.com/
+
+Lenovo Security in the Data Center Powered by ThinkShieldArticle. (n.d.). Retrieved July 12, 2019, from https://lenovopress.com/lp1116-lenovo-security-in-the-data-center-powered-by-thinkshield
+
+Graham. (2019, March 27). ASUS pushes out urgent security update after attackers hacked its automatic Live Update tool. Retrieved July 12, 2019, from https://www.tripwire.com/state-of-security/featured/asus-security-update-live-update-tool-hacked/
+

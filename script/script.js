@@ -2,7 +2,7 @@ var names = ["age",
 			 "devices",
 			 "public_wifi",
 			 "vpn",
-			 "smartphone",
+			 "smartphones",
 			 "voice_assist",
 			 "alias",
 			 "alias_info",
@@ -52,7 +52,7 @@ var labels = ["Age group",
 			  "Opening spam emails",
 			  "Caution in information sharing",
 			  "Third party verification",
-			  "Device sharing"]
+			  "Device sharing"];
 
 var helpers = "Check all that apply. Leave unchecked if none"
 
@@ -69,12 +69,13 @@ var schema = {
 				"type": "array"
 			},
 			"public_wifi": {
-				"type": "string"
+				"type": "string",
+                "required": true,
 			},
 			"vpn": {
                 "type": "string"
             },
-			 "smartphone": {
+			"smartphones": {
                 "type": "array"
             },
 			 "voice_assist": {
@@ -123,8 +124,9 @@ var options = {
 				"name": names[2],
 				"type": "radio",
 				"hideNone": "true",
+				"emptySelectFirst" : "false",
 				"label": questions[2],
-				"dataSource": choices[2]
+				"dataSource": choices[2]
 			},
 			"vpn": {
 				"name": names[3],
@@ -133,7 +135,7 @@ var options = {
                 "label": questions[3],
 				"dataSource": choices[3]
             },
-			"smartphone": {
+			"smartphones": {
 				"name": names[4],
                 "type": "checkbox",
                 "label": questions[4],
@@ -236,12 +238,15 @@ $("#form").alpaca({
 	"options": options
 });
 function showModal(input){
-	var modal_messages = [define_age(input["age"])];
+	var modal_messages = 
+	[define_age(input.age),define_device(input.devices),define_public_wifi(input.public_wifi),
+	 define_vpn(input.vpn),define_smartphone(input.smartphones)
+	];
 	
 	var modal_content = "<div class='title'>Age Group"+
-							"<canvas  id='chart_age'></canvas>"+ //Age
-						"</div>"; 
-	console.log(define_device(input.devices));
+							"<canvas  id='chart_age'></canvas>"+
+						"</div>" + testMessage(modal_messages); 
+
 	var modal = new tingle.modal({
 		footer: true,
 		stickyFooter: false,
@@ -269,17 +274,28 @@ function showModal(input){
 		}
 	});
 }
+function testMessage(messages){
+	let final = "",
+		content = messages.length;
 
+	if(content > 0){
+		for(let i = 0 ; i < content ; i++)
+			final += messages[i];
+	}else if(content == 0)
+		final = "No message received.";
+
+	return final;
+}
+//Age
 function define_age(age){
-	var message;
+	let message;
 	
-	message = "You belong to the "+ define_age_helper(age) +" percent of the correspondents that has taken the survey";
+	message = "You belong to the "+ define_age_helper(age) +" percent of the correspondents that has taken the survey<br/><br/>";
 	
 	return message;	
 }
 function define_age_helper(age){
-	
-	var value = 1;
+	let value = 1;
 	
 	if(age < 18)
 		value = 33;
@@ -294,47 +310,111 @@ function define_age_helper(age){
 	
 	return value;
 }
-
+//Devices
 function define_device(devices){
-	
-	var message = "";
+	let message = "";
 	
 	if(devices != undefined){
 		
 		for(let i = 0 ; i < devices.length; i++)
-			message += define_device_helper(devices[i].value) + "\n\n";
+			message += define_device_helper(devices[i].value);
 	}else
 		message = "You selected no device. That's okay!";
 	return message;
 }
 function define_device_helper(device){
-	var message = "";
+	let message = "";
 	
 	switch(device){
 		case "Amazon Alexa": message = 
-		"Amazon employs thousands of people around the world to listen to voice recordings captured in Echo users’ homes and offices" ; break; 
+		"\n\nAmazon employs thousands of people around the world to listen to voice recordings captured in Echo users’ homes and offices" ; break; 
 		
 		case "CCTV": message = 
-		"The advantage of CCTV systems is that a company’s property can be watched over constantly. But it becomes a more complex issue when installed cameras watch employees, students, or customers. And as ‘personal data’, the responsibilities of data controllers in managing it are made a little more intricate." ; 
+		"\n\nThe advantage of CCTV systems is that a company’s property can be watched over constantly. But it becomes a more complex issue when installed cameras watch employees, students, or customers. And as ‘personal data’, the responsibilities of data controllers in managing it are made a little more intricate." ; 
 		break; 
 		
-		case "Game Consoles": message = "Take the Xbox One Kinect 2.0 feature. It records your voice and takes note of your face and body details. And since it’s “always on,” you know that your information is already saved and stored. Pair that with the PlayStation 4 scanning your living room for gameplay—data of you and your living room are fed into the virtual realm." ; 
+		case "Game Consoles": message = "\n\nTake the Xbox One Kinect 2.0 feature. It records your voice and takes note of your face and body details. And since it’s “always on,” you know that your information is already saved and stored. Pair that with the PlayStation 4 scanning your living room for gameplay—data of you and your living room are fed into the virtual realm." ; 
 		break; 
 		
-		case "Google Home": message = "Google Home can be unintentionally triggered and record conversations. Many people leave Google Home unmuted whilst it is not being used, however, they shouldn’t." ; 
+		case "Google Home": message = "\n\nGoogle Home can be unintentionally triggered and record conversations. Many people leave Google Home unmuted whilst it is not being used, however, they shouldn’t." ; 
 		break; 
 		
-		case "Laptop": message = "Laptops offer a great convenience due to their portability. This portability, however, makes them a prime target for thieves. These thieves not only target portable computers for the value of the device itself, but also for the restricted data they might contain." ; 
+		case "Laptop": message = "\n\nLaptops offer a great convenience due to their portability. This portability, however, makes them a prime target for thieves. These thieves not only target portable computers for the value of the device itself, but also for the restricted data they might contain." ; 
 		break; 
 		
-		case "Personal Computer": message = "There are new viruses and security threats that emerge every day!  Hackers and scammers are becoming more sophisticated than ever in masking their threats so that people will unknowingly click them and become a victim." ; 
+		case "Personal Computer": message = "\n\nThere are new viruses and security threats that emerge every day!  Hackers and scammers are becoming more sophisticated than ever in masking their threats so that people will unknowingly click them and become a victim." ; 
 		break; 
 		
-		case "Smartphone": message = "Unlike many of our computers, our smartphones are ALWAYS with us and many of us rarely turn them off. However, consumers need to be aware of the kind of information that can be collected by various entities from your smartphone." ; 
+		case "Smartphone": message = "\n\nUnlike many of our computers, our smartphones are ALWAYS with us and many of us rarely turn them off. However, consumers need to be aware of the kind of information that can be collected by various entities from your smartphone." ; 
 		break; 
 		
-		case "Tablet": message = "If you want to bring your own Android or iOS tablet to work, you should consider a couple of factors before taking the plunge. First, in some respects you lose ownership of your device once you commit to using it at work and keeping potentially sensitive data on it. Corporate intellectual property or client data is extremely valuable to your employer, and as such you lose certain freedoms regarding any device that contains that information. Mishandle that information, and you might lose your job" ; break;
+		case "Tablet": message = "\n\nIf you want to bring your own Android or iOS tablet to work, you should consider a couple of factors before taking the plunge. First, in some respects you lose ownership of your device once you commit to using it at work and keeping potentially sensitive data on it. Corporate intellectual property or client data is extremely valuable to your employer, and as such you lose certain freedoms regarding any device that contains that information. Mishandle that information, and you might lose your job" ; break;
 	}
 	
+	message += "<br/><br/>";
+
+	return message;
+}
+function define_public_wifi(public_wifi){
+	let messages = ["The principal disadvantages to using public wifi are, respectively, passive and active. Passively, your traffic can be sniffed or intercepted by other parties on or near the network. Actively, you become vulnerable to ' Man in the Middle' attacks, which allow an attacker to intersplice themself between you and a web page you are visiting","Public Wi-Fi is a great opportunity for governments to connect entire cities: smart cities deploying free Wi-Fi are largely increasing and as a result, can effectively empower their communities with better services"],
+		message;
+
+	if(public_wifi == "Yes")
+		message = messages[0];
+	else if(public_wifi == "No")
+		message = messages[1];
+	
+	message += "<br/><br/>";
+
+	return message;
+}
+function define_vpn(vpn){
+	let messages = ["VPN hides your IP address and encrypts your online traffic, it essentially makes sure your digital footprints can’t be tracked on the Internet","Depending on various factors of the VPN server, your Internet connection speeds might take a hit when you using the service.","A VPN secures the private network, using encryption and other security mechanisms to ensure that only authorized users can access the network and that the data cannot be intercepted. This type of network is designed to provides a secure, encrypted tunnel in which to transmit the data between the remote user and the company network."],
+		message;
+
+	if(vpn != undefined){
+		if(vpn == "No")
+			message = messages[0];
+		else if(vpn == "Yes")
+			message = messages[1];
+		else if(vpn == "No idea")
+			message = messages[2];
+	}else
+		message = "";
+
+	message += "<br/><br/>";
+
+	return message;
+}
+function define_smartphone(smartphones){
+	let message = "",
+		phones = smartphones.length;
+	
+	if(phones > 0){
+		for(let i = 0 ; i < smartphones.length; i++)
+			message += define_smartphone_helper(smartphones[i].value);
+	}else if(phones == 0)
+		message = "Owning a smartphone is not a necessity. That's okay!";
+
+	message += "<br/><br/>";
+	
+	return message;
+}
+function define_smartphone_helper(smartphone){
+	let message = "";
+
+	switch(smartphone){
+		case "iPhone": message = "There’s a security setting in iOS that will erase everything on your iPhone, resetting it back to a blank, factory-state slate if you tap in the wrong passcode 10 times." ; break;
+		case "Samsung": message = "If a device is lost or stolen, a sophisticated attack can extract data from it as long as the device is still running, even if the device is locked. Samsung created Sensitive Data Protection to address this specific issue" ; break;
+		case "Oppo": message = "Oppo is the first company to officially comment after the government asked all handset makers that sell phones in India to share the security protocols they follow to secure mobile phones" ; break;
+		case "Huawei": message = "Huawei claims to be a willing participant in the world of information security. On its website, Huawei said that it “… is willing to work with all governments, customers and partners through various channels to jointly cope with cyber-security threats and challenges from cyber-security.”" ; break;
+		case "Cherry Mobile": message = "Cherry Mobile practice all necessary measures to secure any personal information you give to them because your privacy is important to them." ; break;
+		case "Vivo": message = "VivoSecurity is a leading pioneer in cyber risk quantification based on data science. Its products and services help organizations achieve, maintain, and demonstrate optimal information security and governance, risk, and compliance (GRC) programs." ; break;
+		case "Lenovo": message = "Security threats are ever evolving but Lenovo provides a suite of cutting edge solutions to guard your data infrastructure against damage or exposure" ; break;
+		case "Asus": message = "Taiwan-based technology giant ASUS is advising concerned customers to run a newly-created diagnostic tool on their Windows computers after hackers pushed out malware to what some security researchers have estimated to be as many as one million PCs using ASUS’s own Live Update software tool" ; break;
+	}
+
+	message += "<br/><br/>";
+
 	return message;
 }
