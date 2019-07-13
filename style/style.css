@@ -1,14 +1,4 @@
-div #form{
-	width: 60%;
-	margin-left: 20%;
-	margin-right: 20%;
-}
-canvas{
-	width: 80%;
-	height: 10%;
-	margin-right: 10%;
-	margin-left: 10%;
-}
-.title{
-	text-align: center;
-}
+div #form{width: 60%;margin-left: 20%;margin-right: 20%;}
+canvas{width: 80%;height: 5%;margin-right: 10%;margin-left: 10%;}
+.title{width: 100%; border-bottom: 1px solid rgb(175, 175, 175); text-align: center}
+.span-header{font-size: 40px; background-color: #F3F5F6; padding: 0 10px;}
